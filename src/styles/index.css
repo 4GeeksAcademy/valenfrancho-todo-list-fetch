@@ -1,12 +1,67 @@
+.to-do-title {
+    margin: 40px 0px 25px 0px;
+    color: #6D2E46;
+    font-family: 'Bitter';
+}
 
-/* 
+input {
+    width: 100%;
+    background-color: #FEF1EC;
+    padding: 5px 5px 5px 20px;
+    border-color: transparent transparent #6D2E46 transparent;
+    border-width: 1px;
+}
 
-    You can write your own styles here...
-    
-    
-    ...Or you can use the import command to include 
-    other sylesheets into your bunde as well, e.j:
-    
-    import 'relative/path/to/stylesheet.scss';
+input:focus {
+    outline: none;
+}
 
-*/
+.to-do-list {
+    margin: auto;
+    background-color: #FDE3D8;
+    width: 30%;
+    font-family: 'Pangolin';
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    list-style: none;
+    font-size: larger;
+    padding-left: 0%;
+}
+
+.to-do-list li {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 4%;
+    height: 40px;
+    padding-top: 5px;
+}
+
+.to-do-list button {
+    color: darkgray;
+    background-color: transparent;
+    border: none;
+    margin-right: 15px;
+    visibility: hidden;
+    padding-bottom: 5px;
+}
+
+.actual-tasks:hover {
+    background-color: #FBC8B1;
+}
+
+.to-do-list li:hover button {
+    visibility: visible;
+}
+
+.placeholder-task {
+    color: darkgray;
+}
+
+.pending-task-number {
+    font-size: small;
+    color: gray;
+    text-align: end;
+    padding-right: 4px;
+    font-family: 'Bitter';
+    background-color: #FEF1EC;
+}
