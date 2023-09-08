@@ -1,56 +1,57 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 
 const ToDo = () => {
-    const [newItem, setNewItem] = useState("");
-    const [items, setItems] = useState([]);
+    const [tasks, setTasks] = useState([]);
+    const host = "https://jsonplaceholder.typicode.com/";
 
-    function addItem(e) {
-        e.preventDefault();
-    
-        if (!newItem) {
-          alert("Enter a task");
-          return;
-        }
-    
-        const item = {
-          id: Date.now(),
-          text: newItem,
-        };
-    
-        setItems((oldList) => [...oldList, item]);
-        setNewItem("");
+    const fetchTasks = async () => {
+      const url = host + "todos";
+      const request = {
+        method: "GET",
+      };
+  
+      const response = await fetch(url, request);
+  
+      if (response.ok) {
+        const data = await response.json();
+        setTasks(data);
+      } else {
+        console.log("Error", response.status, response.statusText);
       }
-    
-      function deleteItem(id) {
-        setItems((oldList) => oldList.filter((item) => item.id !== id));
-      }
+    };
+  
+    useEffect(() => {
+      fetchTasks();
+    }, []);
 
     return (
+      <div className="to-do-list">
         <div>
-            <h1 className="to-do-title">MY TO-DOs</h1>
-            <form className="to-do-list" onSubmit={addItem}>
-                <input type="text" 
-                placeholder="What needs to be done?" 
-                value={newItem}
-                onChange={e => setNewItem(e.target.value)}/>
-            </form>
-            <ul className="to-do-list">
-            {items.length === 0 ? ( // Check if the array is empty
-          <li className="placeholder-task">Nothing to do yet, add a new task</li>
-        ) : (
-            items.map((item) => (
-                <li className="actual-tasks" key={item.id}>
-                    {item.text}
-                    <button onClick={() => deleteItem(item.id)}><svg xmlns="http://www.w3.org/2000/svg" height="15px" fill="darkgrey" viewBox="0 0 448 512" style={{ fill: "darkgrey" }} onMouseOver={(e) => (e.currentTarget.style.fill = "darkred")} onMouseOut={(e) => (e.currentTarget.style.fill = "darkgrey")}><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"/></svg></button>
-                </li>
-                )))
-            }
-            </ul>
-            <div className="to-do-list">
-              <p className="pending-task-number">Pending tasks: {items.length}</p>
+          {!tasks.length ? (
+            "Loading"
+          ) : (
+            <div>
+              <ul>
+                {tasks.map((task) => (
+                  <li key={task.id}>
+                    {task.title}
+                    {task.completed ? ( 
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="green bi bi-check-lg" viewBox="0 0 16 16">
+                          <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
+                          </svg>
+                      ) : ( 
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="red bi bi-x-lg" viewBox="0 0 16 16">
+                          <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                          </svg>
+                      )}
+                  </li>
+                ))}
+              </ul>
             </div>
+          )}
         </div>
+      </div>
     );
-};
+  };
 
 export default ToDo;
